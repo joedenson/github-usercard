@@ -1,5 +1,5 @@
 /* Step 1: using axios, send a GET request to the following URL 
-           (replacing the palceholder with your Github name):
+           (replacing the placeeholder with your Github name):
            https://api.github.com/users/<your name>
 */
 
@@ -53,3 +53,79 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+
+
+function gitHubCard(obj) {
+
+    const card = document.createElement('div');
+    const img = document.createElement('img');
+    const cardInfo = document.createElement('div');
+    const h3 = document.createElement('h3');
+    const p1 = document.createElement('p');
+    const p2 = document.createElement('p');
+    const p3 = document.createElement('p');
+    const anchor = document.createElement('a');
+    const p4 = document.createElement('p');
+    const p5 = document.createElement('p');
+    const p6 = document.createElement('p');
+
+    card.classList.add('card');
+    img.src = obj.avatar_url;
+    cardInfo.classList.add('card-info');
+    h3.classList.add('name');
+    p1.classList.add('username');
+    anchor.href = obj.html_url;
+    h3.textContent = obj.name;
+    p1.textContent = obj.login;
+    p2.textContent = `Location: ${obj.location}`
+    anchor.textContent = `${obj.html_url}`;
+    p3.textContent = `Profile: `;
+    p4.textContent = `Followers: ${obj.followers}`;
+    p5.textContent = `Following: ${obj.following}`;
+    p6.textContent = `Bio: ${obj.bio}`;
+
+    card.appendChild(img);
+    card.appendChild(cardInfo);
+    card.appendChild(h3);
+    card.appendChild(p1);
+    card.appendChild(p2);
+    p3.appendChild(anchor);
+    card.appendChild(p3);
+    card.appendChild(p4);
+    card.appendChild(p5);
+    card.appendChild(p6);
+
+    return card;
+
+}
+
+
+const cards = document.querySelector('.cards');
+
+axios
+    .get('https://api.github.com/users/joedenson')
+    .then(response => {
+        response.data
+        const newCard = gitHubCard(response.data);
+        cards.appendChild(newCard);
+
+    })
+    .catch(error => {
+        console.log("The data was not returned", error);
+    });
+
+
+axios
+    .get('https://api.github.com/users/joedenson/followers')
+    .then(response => {
+        console.log(response);
+        response.data.forEach(item => {
+            const newCard = gitHubCard(item);
+            cards.appendChild(newCard);
+        })
+
+    })
+    .catch(error => {
+        console.log("The data was not returned", error);
+    });
